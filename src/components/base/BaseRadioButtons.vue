@@ -67,6 +67,7 @@ h3,
 
 .selected-unit {
   font-size: 1.25rem;
+  transition: margin-top 0.3s ease;
 }
 
 .radio-options {
@@ -88,5 +89,12 @@ input[type='radio'] {
 label {
   margin-left: 0.5rem;
   font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .selected-unit {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+  }
 }
 </style>
