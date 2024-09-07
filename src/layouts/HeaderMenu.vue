@@ -22,7 +22,6 @@ const navigateTo = (route) => {
         <li 
           v-for="item in menuItems" 
           :key="item.label" 
-          :class="item.label.toLowerCase()"
           @click="navigateTo(item.route)"
         >
           {{ item.label }}
@@ -54,19 +53,8 @@ nav ul {
 
 li {
   cursor: pointer;
-}
-
-.home {
-  margin-right: auto;
-}
-
-.history {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.settings {
-  margin-left: auto;
+  font-size: 1.5rem;
+  flex: 1;
+  text-align: center;
 }
 </style>
