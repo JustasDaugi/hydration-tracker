@@ -16,6 +16,8 @@
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
     "@vueuse/core": "^11.0.3",
+    "@vueuse/motion": "^2.2.5",
+    "mitt": "^3.0.1",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-datepicker-next": "^1.0.3",
