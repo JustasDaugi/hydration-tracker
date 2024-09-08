@@ -1,44 +1,74 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { calculateWaterIntake } from '../../../stores/drinkTarget'
 import { baseStorage } from '../../../composables'
+import AddButton from './AddButton.vue'
+import WaterMeter from './WaterMeter.vue'
+import emitter from './eventBus'
 
-const { recommendedIntakeMl, recommendedIntakeOz } = calculateWaterIntake ()
-const { selectedUnit } = baseStorage()
+const { recommendedIntakeMl, recommendedIntakeOz } = calculateWaterIntake()
+const { selectedUnit, selectedCupSize } = baseStorage()
 const currentIntake = ref(0)
 
-const progress = computed(() => {
-  if (!recommendedIntakeMl.value || !recommendedIntakeOz.value) {
-    return 'Calculating...'
-  }
-  
-  if (selectedUnit.value === 'imperial') {
-    return `${currentIntake.value}/${recommendedIntakeOz.value} oz`
-  } else {
-    return `${currentIntake.value}/${recommendedIntakeMl.value} ml`
-  }
+const targetIntake = computed(
+  () =>
+    ({
+      imperial: recommendedIntakeOz.value,
+      metric: recommendedIntakeMl.value
+    })[selectedUnit.value]
+)
+
+const unit = computed(
+  () =>
+    ({
+      imperial: 'oz',
+      metric: 'ml'
+    })[selectedUnit.value]
+)
+
+const progress = computed(() =>
+  targetIntake.value
+    ? `${currentIntake.value}/${targetIntake.value} ${unit.value}`
+    : 'Calculating...'
+)
+
+const handleAdd = () => {
+  currentIntake.value = Math.min(currentIntake.value + selectedCupSize.value, targetIntake.value)
+}
+
+onMounted(() => {
+  emitter.on('cupSizeChanged', (size) => {
+    selectedCupSize.value = size
+  })
+})
+
+onUnmounted(() => {
+  emitter.off('cupSizeChanged')
 })
 </script>
 
 <template>
   <div class="drink-target">
     <div class="circle">
-      <p class="intake">{{ progress }}</p>
-      <p class="target-label"><strong>Daily Drink Target</strong></p>
+      <WaterMeter :currentIntake="currentIntake" :targetIntake="targetIntake || 1" />
+      <p class="text intake">{{ progress }}</p>
+      <p class="text target-label"><strong>Daily Drink Target</strong></p>
+      <AddButton :cupSize="selectedCupSize" @add="handleAdd" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.drink-target {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.drink-target,
+.circle {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.drink-target {
+  position: fixed;
+  inset: 0;
 }
 
 .circle {
@@ -46,22 +76,23 @@ const progress = computed(() => {
   height: 380px;
   border-radius: 50%;
   border: 4px solid #3498db;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.text {
+  color: #333;
+  text-align: center;
 }
 
 .intake {
   font-size: 28px;
-  color: #333;
-  text-align: center;
   margin-bottom: 10px;
 }
 
 .target-label {
   font-size: 18px;
-  color: #333;
-  text-align: center;
+  margin-bottom: 60px;
 }
 </style>
