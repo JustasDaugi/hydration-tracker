@@ -3,28 +3,21 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { calculateWaterIntake } from '../../../stores/drinkTarget'
 import { baseStorage } from '../../../composables'
 import AddButton from './AddButton.vue'
-import WaterMeter from './WaterMeter.vue'
 import emitter from './eventBus'
 
 const { recommendedIntakeMl, recommendedIntakeOz } = calculateWaterIntake()
 const { selectedUnit, selectedCupSize } = baseStorage()
 const currentIntake = ref(0)
 
-const targetIntake = computed(
-  () =>
-    ({
-      imperial: recommendedIntakeOz.value,
-      metric: recommendedIntakeMl.value
-    })[selectedUnit.value]
-)
+const targetIntake = computed(() => ({
+  imperial: recommendedIntakeOz.value,
+  metric: recommendedIntakeMl.value
+})[selectedUnit.value])
 
-const unit = computed(
-  () =>
-    ({
-      imperial: 'oz',
-      metric: 'ml'
-    })[selectedUnit.value]
-)
+const unit = computed(() => ({
+  imperial: 'oz',
+  metric: 'ml'
+})[selectedUnit.value])
 
 const progress = computed(() =>
   targetIntake.value
@@ -34,6 +27,9 @@ const progress = computed(() =>
 
 const handleAdd = () => {
   currentIntake.value = Math.min(currentIntake.value + selectedCupSize.value, targetIntake.value)
+  const now = new Date()
+  const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+  emitter.emit('recordAdded', { cupSize: selectedCupSize.value, time })
 }
 
 onMounted(() => {
@@ -50,7 +46,6 @@ onUnmounted(() => {
 <template>
   <div class="drink-target">
     <div class="circle">
-      <WaterMeter :currentIntake="currentIntake" :targetIntake="targetIntake || 1" />
       <p class="text intake">{{ progress }}</p>
       <p class="text target-label"><strong>Daily Drink Target</strong></p>
       <AddButton :cupSize="selectedCupSize" @add="handleAdd" />
