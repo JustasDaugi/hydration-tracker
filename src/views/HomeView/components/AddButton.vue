@@ -48,8 +48,6 @@ onUnmounted(() => {
 
 .add-button {
   flex-direction: column;
-  position: absolute;
-  bottom: 20px;
 }
 
 .amount {
