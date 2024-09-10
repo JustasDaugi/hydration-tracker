@@ -1,28 +1,33 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { calculateWaterIntake } from '../../../stores/drinkTarget'
 import { baseStorage } from '../../../composables'
 import AddButton from './AddButton.vue'
 import emitter from './eventBus'
 
 const { recommendedIntakeMl, recommendedIntakeOz } = calculateWaterIntake()
-const { selectedUnit, selectedCupSize } = baseStorage()
-const currentIntake = ref(0)
+const { selectedUnit, selectedCupSize, currentIntake, lastResetDate } = baseStorage()
 
-const targetIntake = computed(() => ({
-  imperial: recommendedIntakeOz.value,
-  metric: recommendedIntakeMl.value
-})[selectedUnit.value])
+const targetIntake = computed(
+  () =>
+    ({
+      imperial: recommendedIntakeOz.value,
+      metric: recommendedIntakeMl.value
+    })[selectedUnit.value]
+)
 
-const unit = computed(() => ({
-  imperial: 'oz',
-  metric: 'ml'
-})[selectedUnit.value])
+const unit = computed(
+  () =>
+    ({
+      imperial: 'oz',
+      metric: 'ml'
+    })[selectedUnit.value]
+)
 
 const progress = computed(() =>
   targetIntake.value
     ? `${currentIntake.value}/${targetIntake.value} ${unit.value}`
-    : 'Calculating...'
+    : '0/0'
 )
 
 const handleAdd = () => {
@@ -32,7 +37,16 @@ const handleAdd = () => {
   emitter.emit('recordAdded', { cupSize: selectedCupSize.value, time })
 }
 
+const resetIfNewDay = () => {
+  const today = new Date().toDateString()
+  if (lastResetDate.value !== today) {
+    currentIntake.value = 0
+    lastResetDate.value = today
+  }
+}
+
 onMounted(() => {
+  resetIfNewDay()
   emitter.on('cupSizeChanged', (size) => {
     selectedCupSize.value = size
   })
@@ -41,6 +55,9 @@ onMounted(() => {
 onUnmounted(() => {
   emitter.off('cupSizeChanged')
 })
+
+const intervalId = setInterval(resetIfNewDay, 60000)
+onUnmounted(() => clearInterval(intervalId))
 </script>
 
 <template>
