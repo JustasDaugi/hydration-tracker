@@ -6,13 +6,13 @@ import { baseStorage } from '../../../composables'
 const { selectedCupSize } = baseStorage()
 
 const cupSizes = [
-  { size: 100, icon: '🫖', name: 'Small tea cup' },
-  { size: 125, icon: '🍵', name: 'Medium tea cup' },
-  { size: 150, icon: '☕', name: 'Large tea cup' },
-  { size: 175, icon: '🥛', name: 'Medium glass of water' },
-  { size: 200, icon: '🥤', name: 'Recyclable coffee cup' },
-  { size: 300, icon: '🍺', name: 'Beer mug' },
-  { size: 400, icon: '🍶', name: 'Water bottle' }
+  { size: 100, icon: 'mdi-coffee-outline', name: 'Small tea cup' },
+  { size: 125, icon: 'mdi-coffee', name: 'Medium tea cup' },
+  { size: 150, icon: 'mdi-coffee', name: 'Large tea cup' },
+  { size: 175, icon: 'mdi-glass-mug-variant', name: 'Medium glass of water' },
+  { size: 200, icon: 'mdi-cup', name: 'Recyclable coffee cup' },
+  { size: 300, icon: 'mdi-beer', name: 'Beer mug' },
+  { size: 400, icon: 'mdi-bottle-water', name: 'Water bottle' }
 ]
 
 const selectSize = (size) => {
@@ -31,15 +31,19 @@ watch(
 
 <template>
   <div class="switch-cup-container">
-    <button
+    <v-btn
       v-for="cup in cupSizes"
       :key="cup.size"
       @click="selectSize(cup.size)"
-      :class="['cup-option', { selected: cup.size === selectedCupSize }]"
+      :color="cup.size === selectedCupSize ? 'primary' : ''"
+      variant="outlined"
+      class="cup-option"
+      density="compact"
+      size="small"
     >
-      <span class="cup-icon">{{ cup.icon }}</span>
+      <v-icon size="small">{{ cup.icon }}</v-icon>
       <span class="cup-size">{{ cup.size }}ml</span>
-    </button>
+    </v-btn>
   </div>
 </template>
 
@@ -52,28 +56,18 @@ watch(
 }
 
 .cup-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.cup-option.selected {
-  background-color: #e0f7fa;
-  border-color: #00bcd4;
-}
-
-.cup-icon {
-  font-size: 1.5em;
+  min-width: 0;
+  width: 60px;
+  height: 60px;
 }
 
 .cup-size {
-  font-size: 0.8em;
-  margin-top: 5px;
+  font-size: 0.7em;
+  margin-top: 2px;
+}
+
+:deep(.v-btn__content) {
+  flex-direction: column;
+  padding: 4px;
 }
 </style>
