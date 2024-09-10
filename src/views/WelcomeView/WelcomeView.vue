@@ -18,29 +18,28 @@ const handleOKClick = () => {
 </script>
 
 <template>
-  <main class="welcome-view">
-    <HeaderText />
-    <BaseRadioButtons v-model="selectedUnit" />
-    <BaseWeightInput :selectedUnit="selectedUnit" v-model="weight" />
-    <BaseClockPicker 
-      v-model:wakeUpTime="wakeUpTime" 
-      v-model:sleepTime="sleepTime" 
-    />
-    <div class="button-container">
-      <OKButton @click="handleOKClick" />
-    </div>
-  </main>
+  <div class="welcome-view-wrapper">
+    <main class="welcome-view">
+      <HeaderText />
+      <BaseRadioButtons v-model="selectedUnit" />
+      <BaseWeightInput :selectedUnit="selectedUnit" v-model="weight" />
+      <BaseClockPicker 
+        v-model:wakeUpTime="wakeUpTime" 
+        v-model:sleepTime="sleepTime" 
+      />
+    </main>
+    <OKButton @click="handleOKClick" />
+  </div>
 </template>
 
 <style scoped>
-.welcome-view {
-  padding-top: 120px;
+.welcome-view-wrapper {
   position: relative;
+  min-height: 100vh;
+  padding-bottom: 80px;
 }
 
-.button-container {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+.welcome-view {
+  padding-top: 120px;
 }
 </style>
