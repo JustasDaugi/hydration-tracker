@@ -13,10 +13,9 @@ const handleClick = () => {
 <style scoped>
 .ok-button {
   position: fixed;
-  top: 90%;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 10px 20px;
   font-size: 16px;
   background-color: #333;
@@ -25,16 +24,17 @@ const handleClick = () => {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 1000;
 }
 
 .ok-button:hover {
   background-color: #4a4a4a;
-  transform: translateY(-2px);
+  transform: translateX(-50%) translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .ok-button:active {
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 </style>
