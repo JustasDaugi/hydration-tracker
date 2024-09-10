@@ -15,7 +15,9 @@ const showWelcomeView = inject('showWelcomeView')
         <SwitchCup />
       </div>
     </div>
-    <TodaysRecords class="todays-records-wrapper" />
+    <div class="todays-records-container">
+      <TodaysRecords class="todays-records-wrapper" />
+    </div>
   </div>
 </template>
 
@@ -33,7 +35,7 @@ const showWelcomeView = inject('showWelcomeView')
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: translateY(-10%); /* Move the entire wrapper upwards */
+  transform: translateY(-10%);
 }
 
 .switch-cup-wrapper {
@@ -46,12 +48,17 @@ const showWelcomeView = inject('showWelcomeView')
   justify-content: center;
 }
 
-.todays-records-wrapper {
+.todays-records-container {
   position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.todays-records-wrapper {
+  width: 500px;
   max-width: 90%;
 }
 </style>
