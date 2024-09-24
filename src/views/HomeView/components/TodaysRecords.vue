@@ -2,10 +2,12 @@
 import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue'
 import emitter from './eventBus'
 import VerticalDotsMenu from './VerticalDotsMenu.vue'
+import { baseStorage } from '../../../composables'
 
 const records = ref([])
-const lastSavedDate = ref('')
+const lastResetDate = ref('')
 const recordsList = ref(null)
+const { currentIntake } = baseStorage()
 
 const addRecord = (record) => {
   checkAndResetRecords()
@@ -21,16 +23,16 @@ const addRecord = (record) => {
 const saveRecords = () => {
   const currentDate = new Date().toDateString()
   localStorage.setItem('todaysRecords', JSON.stringify(records.value))
-  localStorage.setItem('lastSavedDate', currentDate)
-  lastSavedDate.value = currentDate
+  localStorage.setItem('lastResetDate', currentDate)
+  lastResetDate.value = currentDate
 }
 
 const loadRecords = () => {
   const savedRecords = localStorage.getItem('todaysRecords')
-  const savedDate = localStorage.getItem('lastSavedDate')
+  const savedResetDate = localStorage.getItem('lastResetDate')
   
-  if (savedRecords && savedDate) {
-    lastSavedDate.value = savedDate
+  if (savedRecords && savedResetDate) {
+    lastResetDate.value = savedResetDate
     checkAndResetRecords()
     records.value = JSON.parse(savedRecords)
   }
@@ -38,14 +40,14 @@ const loadRecords = () => {
 
 const checkAndResetRecords = () => {
   const currentDate = new Date().toDateString()
-  if (currentDate !== lastSavedDate.value) {
+  if (currentDate !== lastResetDate.value) {
     records.value = []
-    lastSavedDate.value = currentDate
+    currentIntake.value = 0
+    lastResetDate.value = currentDate
   }
 }
 
 const editRecord = (index) => {
-  // Implement edit functionality
   console.log('Edit record at index:', index)
 }
 
@@ -66,6 +68,9 @@ onUnmounted(() => {
 watch(records, () => {
   saveRecords()
 }, { deep: true })
+
+const intervalId = setInterval(checkAndResetRecords, 60000) 
+onUnmounted(() => clearInterval(intervalId))
 </script>
 
 <template>
