@@ -5,33 +5,20 @@ import { baseStorage } from '../../../composables'
 import AddButton from './AddButton.vue'
 import emitter from './eventBus'
 
-const { recommendedIntakeMl, recommendedIntakeOz } = calculateWaterIntake()
-const { selectedUnit, selectedCupSize, currentIntake, lastResetDate } = baseStorage()
+const { recommendedIntakeMl } = calculateWaterIntake()
+const { selectedCupSize, currentIntake, lastResetDate } = baseStorage()
 
-const targetIntake = computed(
-  () =>
-    ({
-      imperial: recommendedIntakeOz.value,
-      metric: recommendedIntakeMl.value
-    })[selectedUnit.value]
-)
-
-const unit = computed(
-  () =>
-    ({
-      imperial: 'oz',
-      metric: 'ml'
-    })[selectedUnit.value]
-)
-
-const progress = computed(() =>
-  targetIntake.value
-    ? `${currentIntake.value}/${targetIntake.value} ${unit.value}`
-    : '0/0'
-)
+const progress = computed(() => {
+  if (!recommendedIntakeMl.value) return '0/0'
+  return `${currentIntake.value}/${recommendedIntakeMl.value} ml`
+})
 
 const handleAdd = () => {
-  currentIntake.value = Math.min(currentIntake.value + selectedCupSize.value, targetIntake.value)
+  const addedAmountMl = selectedCupSize.value
+  currentIntake.value = Math.min(
+    currentIntake.value + addedAmountMl,
+    recommendedIntakeMl.value
+  )
   const now = new Date()
   const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
   emitter.emit('recordAdded', { cupSize: selectedCupSize.value, time })
