@@ -1,28 +1,26 @@
 <script setup>
 import { inject } from 'vue';
-import HeaderText from './components/HeaderText.vue';
-import BaseRadioButtons from '../../components/base/BaseRadioButtons.vue';
+import HeaderText from '../WelcomeView/components/HeaderText.vue';
 import BaseWeightInput from '../../components/base/BaseWeightInput.vue';
 import BaseClockPicker from '../../components/base/BaseClockPicker.vue';
-import OKButton from './components/OKButton.vue';
+import OKButton from '../WelcomeView/components/OKButton.vue';
 import { baseStorage } from '../../composables';
 
-const { selectedUnit, weight, wakeUpTime, sleepTime } = baseStorage();
+const { weight, wakeUpTime, sleepTime } = baseStorage();
 
 const toggleViews = inject('toggleViews');
 
 const handleOKClick = () => {
-  console.log('OK button clicked');
+  console.log('Settings updated');
   toggleViews();
 }
 </script>
 
 <template>
-  <div class="welcome-view-wrapper">
-    <main class="welcome-view">
+  <div class="settings-view-wrapper">
+    <main class="settings-view">
       <HeaderText />
-      <BaseRadioButtons v-model="selectedUnit" />
-      <BaseWeightInput :selectedUnit="selectedUnit" v-model="weight" />
+      <BaseWeightInput v-model="weight" />
       <BaseClockPicker 
         v-model:wakeUpTime="wakeUpTime" 
         v-model:sleepTime="sleepTime" 
@@ -33,13 +31,13 @@ const handleOKClick = () => {
 </template>
 
 <style scoped>
-.welcome-view-wrapper {
+.settings-view-wrapper {
   position: relative;
   min-height: 100vh;
   padding-bottom: 80px;
 }
 
-.welcome-view {
+.settings-view {
   padding-top: 120px;
 }
 </style>
