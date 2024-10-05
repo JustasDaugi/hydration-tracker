@@ -21,7 +21,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/hydro-meter/'),
+  history: createWebHistory('/hydration-tracker/'),
   routes
 })
 
