@@ -83,7 +83,7 @@ input {
   border: none;
   border: 2px solid #ccc;
   width: 100px;
-  color: white;
+  color: black;
 }
 
 .unit {
