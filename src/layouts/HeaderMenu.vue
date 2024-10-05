@@ -37,7 +37,7 @@ const navigateTo = (route) => {
   top: 0;
   left: 0;
   right: 0;
-  background-color: #333;
+  background-color: #058cca;
   color: white;
   padding: 1rem;
   z-index: 1000;
