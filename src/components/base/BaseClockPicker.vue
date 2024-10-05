@@ -24,13 +24,13 @@ const updateSleepTime = (newTime) => {
       <TimePicker
         v-model="wakeUpTime"
         @update:modelValue="updateWakeUpTime"
-        :color="'#222'"
+        :color="'#FFFFFF'"
         :width="250"
       />
       <TimePicker
         v-model="sleepTime"
         @update:modelValue="updateSleepTime"
-        :color="'#222'"
+        :color="'#FFFFFF'"
         :width="250"
       />
     </div>
