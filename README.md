@@ -10,7 +10,7 @@ Hydration Tracker is an application designed to help you maintain optimal hydrat
 
 - **Customizable Goals**: Set your own daily intake goal or adjust the recommended amount.
 
-- **Detailed Tracking**: Keep a record of when you drink water and how much, allowing you to analyze your hydration patterns over time.
+- **Detailed Tracking**: Keep a record of when you drink water and how much.
 
 ### Tech Stack
 
