@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 import emitter from './eventBus'
 import { baseStorage } from '../../../composables'
 
@@ -12,7 +12,7 @@ const cupSizes = [
   { size: 175, icon: 'mdi-glass-mug-variant', name: 'Medium glass of water' },
   { size: 200, icon: 'mdi-cup', name: 'Recyclable coffee cup' },
   { size: 300, icon: 'mdi-beer', name: 'Beer mug' },
-  { size: 400, icon: 'mdi-bottle-water', name: 'Water bottle' }
+  { size: 400, icon: 'mdi-beer', name: 'Water bottle' }
 ]
 
 const selectSize = (size) => {
@@ -27,6 +27,21 @@ watch(
   },
   { immediate: true }
 )
+
+const showCustomDialog = ref(false)
+const customSize = ref('')
+
+const openCustomDialog = () => {
+  showCustomDialog.value = true
+}
+
+const saveCustomSize = () => {
+  if (customSize.value && !isNaN(customSize.value)) {
+    selectSize(parseInt(customSize.value))
+  }
+  showCustomDialog.value = false
+  customSize.value = ''
+}
 </script>
 
 <template>
@@ -44,6 +59,36 @@ watch(
       <v-icon size="small">{{ cup.icon }}</v-icon>
       <span class="cup-size">{{ cup.size }}ml</span>
     </v-btn>
+    
+    <v-btn
+      @click="openCustomDialog"
+      variant="outlined"
+      class="cup-option custom-size-button"
+      density="compact"
+      size="small"
+    >
+      <v-icon size="small">mdi-pencil</v-icon>
+      <span class="cup-size">Customize</span>
+    </v-btn>
+
+    <v-dialog v-model="showCustomDialog" max-width="300px">
+      <v-card>
+        <v-card-title>Custom Cup Size</v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="customSize"
+            label="Enter size in ml"
+            type="number"
+            suffix="ml"
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="showCustomDialog = false">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="saveCustomSize">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -57,8 +102,12 @@ watch(
 
 .cup-option {
   min-width: 0;
-  width: 60px;
+  width: 40px;
   height: 60px;
+}
+
+.custom-size-button {
+  width: 60px;
 }
 
 .cup-size {
@@ -71,3 +120,4 @@ watch(
   padding: 4px;
 }
 </style>
+
