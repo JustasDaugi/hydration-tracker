@@ -48,8 +48,8 @@ onUnmounted(() => clearInterval(intervalId))
 </script>
 
 <template>
-  <div class="drink-target">
-    <div class="circle">
+  <div class="drink-target d-flex">
+    <div class="main d-flex flex-column">
       <p class="text intake">{{ progress }}</p>
       <p class="text target-label"><strong>Daily Drink Target</strong></p>
       <AddButton :cupSize="selectedCupSize" @add="handleAdd" />
@@ -59,25 +59,19 @@ onUnmounted(() => clearInterval(intervalId))
 
 <style scoped>
 .drink-target,
-.circle {
-  display: flex;
+.main {
+  width: 100%;
   justify-content: center;
   align-items: center;
 }
 
 .drink-target {
-  position: fixed;
-  inset: 0;
+  height: 100%;
 }
 
-.circle {
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  border: 4px solid #3498db;
+.main {
+  height: 75%;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
 }
 
 .text {
@@ -86,12 +80,59 @@ onUnmounted(() => clearInterval(intervalId))
 }
 
 .intake {
-  font-size: 28px;
+  font-size: calc(16px + 2vw);
   margin-bottom: 10px;
 }
 
 .target-label {
-  font-size: 18px;
+  font-size: calc(12px + 1vw);
   margin-bottom: 60px;
+}
+
+@media (min-width: 576px) {
+  .main {
+    width: 70vw;
+    height: 52.5vw;
+  }
+}
+
+@media (min-width: 768px) {
+  .main {
+    width: 45vw;
+    height: 33.75vw;
+  }
+}
+
+@media (min-width: 992px) {
+  .main {
+    width: 380px;
+    height: 285px;
+  }
+
+  .intake {
+    font-size: 28px;
+  }
+
+  .target-label {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 477px) and (max-height: 840px) {
+  .main {
+    width: 70vw;
+    height: 52.5vw;
+    border-width: 3px;
+  }
+
+  .intake {
+    font-size: calc(14px + 2vw);
+    margin-bottom: 5px;
+  }
+
+  .target-label {
+    font-size: calc(10px + 1vw);
+    margin-bottom: 40px;
+  }
 }
 </style>
