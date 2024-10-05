@@ -1,41 +1,23 @@
 <script setup>
-import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useStorage } from '@vueuse/core'
 import emitter from './eventBus'
 import VerticalDotsMenu from './VerticalDotsMenu.vue'
 import { baseStorage } from '../../../composables'
 
-const records = ref([])
-const lastResetDate = ref('')
+const records = useStorage('todaysRecords', [])
+const lastResetDate = useStorage('lastResetDate', '')
 const recordsList = ref(null)
 const { currentIntake } = baseStorage()
 
 const addRecord = (record) => {
   checkAndResetRecords()
-  records.value.push(record)
-  saveRecords()
+  records.value.push({ ...record, date: new Date().toISOString() })
   nextTick(() => {
     if (recordsList.value) {
       recordsList.value.scrollTop = recordsList.value.scrollHeight
     }
   })
-}
-
-const saveRecords = () => {
-  const currentDate = new Date().toDateString()
-  localStorage.setItem('todaysRecords', JSON.stringify(records.value))
-  localStorage.setItem('lastResetDate', currentDate)
-  lastResetDate.value = currentDate
-}
-
-const loadRecords = () => {
-  const savedRecords = localStorage.getItem('todaysRecords')
-  const savedResetDate = localStorage.getItem('lastResetDate')
-  
-  if (savedRecords && savedResetDate) {
-    lastResetDate.value = savedResetDate
-    checkAndResetRecords()
-    records.value = JSON.parse(savedRecords)
-  }
 }
 
 const checkAndResetRecords = () => {
@@ -44,6 +26,10 @@ const checkAndResetRecords = () => {
     records.value = []
     currentIntake.value = 0
     lastResetDate.value = currentDate
+  } else {
+    records.value = records.value.filter(
+      (record) => new Date(record.date).toDateString() === currentDate
+    )
   }
 }
 
@@ -53,11 +39,10 @@ const editRecord = (index) => {
 
 const deleteRecord = (index) => {
   records.value.splice(index, 1)
-  saveRecords()
 }
 
 onMounted(() => {
-  loadRecords()
+  checkAndResetRecords()
   emitter.on('recordAdded', addRecord)
 })
 
@@ -65,11 +50,7 @@ onUnmounted(() => {
   emitter.off('recordAdded', addRecord)
 })
 
-watch(records, () => {
-  saveRecords()
-}, { deep: true })
-
-const intervalId = setInterval(checkAndResetRecords, 60000) 
+const intervalId = setInterval(checkAndResetRecords, 60000)
 onUnmounted(() => clearInterval(intervalId))
 </script>
 
@@ -79,10 +60,10 @@ onUnmounted(() => clearInterval(intervalId))
     <div class="records-list-container">
       <div class="records-list" ref="recordsList">
         <div v-for="(record, index) in records" :key="index" class="record-item">
-          <span class="record-time">{{ record.time }}</span>
+          <span class="record-time">{{ new Date(record.date).toLocaleTimeString() }}</span>
           <span class="record-amount">{{ record.cupSize }}ml</span>
-          <VerticalDotsMenu 
-            @edit="editRecord(index)" 
+          <VerticalDotsMenu
+            @edit="editRecord(index)"
             @delete="deleteRecord(index)"
             class="record-menu"
           />
@@ -100,7 +81,7 @@ onUnmounted(() => clearInterval(intervalId))
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 300px;
+  height: 310px;
   position: relative;
 }
 
