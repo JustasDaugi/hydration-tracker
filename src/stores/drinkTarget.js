@@ -8,18 +8,20 @@ function calculateWaterIntakeInMl(weightInKg) {
 }
 
 export function calculateWaterIntake() {
-  const { weight } = baseStorage()
+  const { weight, customIntake } = baseStorage()
 
   const weightInKg = computed(() => {
     return parseFloat(weight.value || '0')
   })
 
-  const recommendedIntakeInMl = computed(() => {
-    return calculateWaterIntakeInMl(weightInKg.value)
+  const recommendedIntakeMl = computed(() => {
+    return customIntake.value !== null && !isNaN(customIntake.value)
+      ? customIntake.value
+      : calculateWaterIntakeInMl(weightInKg.value)
   })
 
   return {
-    recommendedIntakeMl: recommendedIntakeInMl,
+    recommendedIntakeMl,
     weightInKg
   }
 }
