@@ -8,6 +8,7 @@ export function baseStorage() {
   const selectedCupSize = useStorage('selectedCupSize', 200);
   const currentIntake = useStorage('currentIntake', 0);
   const lastResetDate = useStorage('lastResetDate', '');
+  const customIntake = useStorage('customIntake', null);
 
   return {
     selectedUnit,
@@ -16,6 +17,7 @@ export function baseStorage() {
     sleepTime,
     selectedCupSize,
     currentIntake,
-    lastResetDate
+    lastResetDate,
+    customIntake
   };
 }
