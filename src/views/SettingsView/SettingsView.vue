@@ -1,33 +1,34 @@
 <script setup>
-import { inject } from 'vue';
-import BaseWeightInput from '../../components/base/BaseWeightInput.vue';
-import BaseClockPicker from '../../components/base/BaseClockPicker.vue';
-import OKButton from '../WelcomeView/components/OKButton.vue';
-import { baseStorage } from '../../composables';
-import { useRouter } from 'vue-router';
+import { inject } from 'vue'
+import { useRouter } from 'vue-router'
 
-const { weight, wakeUpTime, sleepTime, selectedUnit } = baseStorage();
-const router = useRouter();
+import BaseWeightInput from '../../components/base/BaseWeightInput.vue'
+import BaseClockPicker from '../../components/base/BaseClockPicker.vue'
+import BaseIntakeInput from '../../components/base/BaseIntakeInput.vue'
+import SaveButton from '../../components/base/SaveButton.vue'
+import { baseStorage } from '../../composables'
 
-const toggleViews = inject('toggleViews');
+const { weight, wakeUpTime, sleepTime, selectedUnit, customIntake } = baseStorage()
 
-const handleOKClick = () => {
-  console.log('Settings updated');
-  toggleViews();
-  router.push({ name: 'home' });
+const router = useRouter()
+const toggleViews = inject('toggleViews')
+const handleSave = () => {
+  console.log('Settings saved')
+
+  toggleViews()
+  router.push({ name: 'home' })
 }
 </script>
 
 <template>
   <div class="settings-view-wrapper">
     <main class="settings-view">
+      <BaseIntakeInput v-model="customIntake" :selectedUnit="selectedUnit" />
       <BaseWeightInput v-model="weight" :selectedUnit="selectedUnit" />
-      <BaseClockPicker 
-        v-model:wakeUpTime="wakeUpTime" 
-        v-model:sleepTime="sleepTime" 
-      />
+
+      <BaseClockPicker v-model:wakeUpTime="wakeUpTime" v-model:sleepTime="sleepTime" />
+      <SaveButton @save="handleSave" />
     </main>
-    <OKButton @click="handleOKClick" />
   </div>
 </template>
 
