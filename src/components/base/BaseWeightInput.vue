@@ -71,9 +71,8 @@ input {
   font-size: 1.2rem;
   padding: 0.5rem;
   border: none;
-  border-bottom: 2px solid #ccc;
+  border: 2px solid #ccc;
   width: 100px;
-  background-color: #333;
   color: white;
 }
 
