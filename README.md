@@ -6,7 +6,7 @@ Hydration Tracker is an application designed to help you maintain optimal hydrat
 
 - **Personalized Water Intake Calculation**: Calculate your ideal daily water intake based on your weight, ensuring you get the right amount of hydration.
 
-- **Flexible Water Logging**: Add your water intake using various cup sizes, making it easy to track no matter what container you're using.
+- **Flexible Water Logging**: Add your water intake using various cup sizes.
 
 - **Customizable Goals**: Set your own daily intake goal or adjust the recommended amount.
 
