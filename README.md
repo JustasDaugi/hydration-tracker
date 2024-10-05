@@ -1,7 +1,5 @@
 # Hydration Tracker
 
-## Stay Hydrated, Stay Healthy
-
 Hydration Tracker is an application designed to help you maintain optimal hydration levels throughout the day.
 
 ### Key Features
