@@ -14,10 +14,10 @@ Hydration Tracker is an application designed to help you maintain optimal hydrat
 
 ### Tech Stack
 
-- **Vite**: Lightning-fast build tool for rapid development
-- **Vue.js**: Progressive JavaScript framework for building user interfaces
-- **Vuetify**: Material Design component framework for Vue.js, providing sleek icons and UI elements
-- **Vue Router**: Official routing library for Vue.js, enabling seamless navigation within the app
+- **Vite**: build tool
+- **Vue.js**: Javascript framework
+- **Vuetify**: Material Design component framework for Vue.js
+- **Vue Router**: Official routing library for Vue.js
 
 ## Getting Started
 
