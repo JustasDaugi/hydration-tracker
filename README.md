@@ -1,6 +1,7 @@
 # Hydration Tracker
 
 Hydration Tracker is an application designed to help you maintain optimal hydration levels throughout the day.
+(Some features of the app are not yet implemented).
 
 ### Key Features
 
